@@ -505,3 +505,14 @@ gfs-rh/Screenshot[[:space:]]2026-03-06[[:space:]]214117.png filter=lfs diff=lfs 
 gfs-rh/Screenshot[[:space:]]2026-03-06[[:space:]]214140.png filter=lfs diff=lfs merge=lfs -text
 gfs-rh/Screenshot[[:space:]]2026-03-06[[:space:]]214210.png filter=lfs diff=lfs merge=lfs -text
 gfs-rh/Screenshot[[:space:]]2026-03-06[[:space:]]214225.png filter=lfs diff=lfs merge=lfs -text
+rh/ecmfw16-1am.png filter=lfs diff=lfs merge=lfs -text
+rh/ecmwf17-1am.png filter=lfs diff=lfs merge=lfs -text
+rh/ecmwf18-1am.png filter=lfs diff=lfs merge=lfs -text
+rh/ecmwf19-1am.png filter=lfs diff=lfs merge=lfs -text
+rh/gfs16-1am.png filter=lfs diff=lfs merge=lfs -text
+rh/gfs17-1am.png filter=lfs diff=lfs merge=lfs -text
+rh/gfs18-1am.png filter=lfs diff=lfs merge=lfs -text
+rh/gfs19-1am.png filter=lfs diff=lfs merge=lfs -text
+rh/ifs17-1am.png filter=lfs diff=lfs merge=lfs -text
+rh/ifs18-1pm.png filter=lfs diff=lfs merge=lfs -text
+rh/ifs19-1am.png filter=lfs diff=lfs merge=lfs -text
