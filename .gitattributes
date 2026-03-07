@@ -501,3 +501,7 @@ current-caps/gefs/Screenshot[[:space:]]2026-03-06[[:space:]]192936.png filter=lf
 current-caps/gefs/Screenshot[[:space:]]2026-03-06[[:space:]]193054.png filter=lfs diff=lfs merge=lfs -text
 Screenshot[[:space:]]2026-03-06[[:space:]]200101.png filter=lfs diff=lfs merge=lfs -text
 Screenshot[[:space:]]2026-03-06[[:space:]]200701.png filter=lfs diff=lfs merge=lfs -text
+gfs-rh/Screenshot[[:space:]]2026-03-06[[:space:]]214117.png filter=lfs diff=lfs merge=lfs -text
+gfs-rh/Screenshot[[:space:]]2026-03-06[[:space:]]214140.png filter=lfs diff=lfs merge=lfs -text
+gfs-rh/Screenshot[[:space:]]2026-03-06[[:space:]]214210.png filter=lfs diff=lfs merge=lfs -text
+gfs-rh/Screenshot[[:space:]]2026-03-06[[:space:]]214225.png filter=lfs diff=lfs merge=lfs -text
