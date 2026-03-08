@@ -26,6 +26,11 @@ jobs:
         WU_API_KEY: ${{ secrets.WU_API_KEY }}
         WU_STATION_ID: ${{ secrets.WU_STATION_ID }}
       run: |
+       - name: Fetch WU data
+      env:
+        WU_API_KEY: ${{ secrets.WU_API_KEY }}
+        WU_STATION_ID: ${{ secrets.WU_STATION_ID }}
+      run: |
         python - <<EOF
         import requests
         import json
@@ -34,32 +39,20 @@ jobs:
         url = f"https://api.weather.com/v2/pws/observations/current?stationId=${{ env.WU_STATION_ID }}&format=json&units=e&apiKey=${{ env.WU_API_KEY }}"
 
         response = requests.get(url)
-        data = response.json()
+        print("API Status Code:", response.status_code)
+        print("API Raw Response:", response.text)
 
-        if 'observations' not in data or not data['observations']:
-            print("No observation data")
-            exit(1)
+        try:
+            data = response.json()
+            print("Parsed JSON keys:", list(data.keys()))
 
-        obs = data['observations'][0]
-
-        current = {
-            "timestamp": datetime.utcnow().isoformat() + "Z",
-            "temp_f": obs.get('temp'),
-            "dewpoint_f": obs.get('dewpt'),
-            "humidity": obs.get('humidity'),
-            "pressure_in": obs.get('pressure'),
-            "wind_dir": obs.get('winddir'),
-            "wind_speed_mph": obs.get('windspeed'),
-            "wind_gust_mph": obs.get('windgust'),
-            "precip_rate_in": obs.get('precipRate'),
-            "precip_total_in": obs.get('precipTotal')
-        }
-
-        with open("current-pws.md", "w") as f:
-            f.write(f"# Current PWS Conditions\\n\\nUpdated: {current['timestamp']}\\n\\n")
-            for k, v in current.items():
-                if v is not None:
-                    f.write(f"- **{k}**: {v}\\n")
+            if 'observations' in data and data['observations']:
+                obs = data['observations'][0]
+                print("Observation keys:", list(obs.keys()))
+            else:
+                print("No observations in response")
+        except Exception as e:
+            print("JSON parse error:", str(e))
         EOF
 
     - name: Commit changes
