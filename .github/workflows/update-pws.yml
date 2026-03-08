@@ -1,0 +1,71 @@
+name: Update PWS Data
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'   # every 30 minutes
+  workflow_dispatch:         # lets you run it manually too
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: pip install requests
+
+    - name: Fetch WU data
+      env:
+        WU_API_KEY: ${{ secrets.WU_API_KEY }}
+        WU_STATION_ID: ${{ secrets.WU_STATION_ID }}
+      run: |
+        python - <<EOF
+        import requests
+        import json
+        from datetime import datetime
+
+        url = f"https://api.weather.com/v2/pws/observations/current?stationId=${{ env.WU_STATION_ID }}&format=json&units=e&apiKey=${{ env.WU_API_KEY }}"
+
+        response = requests.get(url)
+        data = response.json()
+
+        if 'observations' not in data or not data['observations']:
+            print("No observation data")
+            exit(1)
+
+        obs = data['observations'][0]
+
+        current = {
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "temp_f": obs.get('temp'),
+            "dewpoint_f": obs.get('dewpt'),
+            "humidity": obs.get('humidity'),
+            "pressure_in": obs.get('pressure'),
+            "wind_dir": obs.get('winddir'),
+            "wind_speed_mph": obs.get('windspeed'),
+            "wind_gust_mph": obs.get('windgust'),
+            "precip_rate_in": obs.get('precipRate'),
+            "precip_total_in": obs.get('precipTotal')
+        }
+
+        with open("current-pws.md", "w") as f:
+            f.write(f"# Current PWS Conditions\\n\\nUpdated: {current['timestamp']}\\n\\n")
+            for k, v in current.items():
+                if v is not None:
+                    f.write(f"- **{k}**: {v}\\n")
+        EOF
+
+    - name: Commit changes
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add current-pws.md
+        git commit -m "Update current PWS data" || echo "No changes to commit"
+        git push
