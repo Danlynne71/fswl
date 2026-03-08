@@ -26,28 +26,54 @@ jobs:
         WU_API_KEY: ${{ secrets.WU_API_KEY }}
         WU_STATION_ID: ${{ secrets.WU_STATION_ID }}
       run: |
+    - name: Fetch WU data
+      env:
+        WU_API_KEY: ${{ secrets.WU_API_KEY }}
+        WU_STATION_ID: ${{ secrets.WU_STATION_ID }}
+      run: |
         python - <<EOF
         import requests
-        import json
         from datetime import datetime
 
         url = f"https://api.weather.com/v2/pws/observations/current?stationId=${{ env.WU_STATION_ID }}&format=json&units=e&apiKey=${{ env.WU_API_KEY }}"
 
         response = requests.get(url)
-        print("API Status Code:", response.status_code)
-        print("API Raw Response:", response.text)
+        if response.status_code != 200:
+            print(f"API error: {response.status_code} - {response.text}")
+            exit(1)
 
         try:
             data = response.json()
-            print("Parsed JSON keys:", list(data.keys()))
-
-            if 'observations' in data and data['observations']:
-                obs = data['observations'][0]
-                print("Observation keys:", list(obs.keys()))
-            else:
+            if 'observations' not in data or not data['observations']:
                 print("No observations in response")
+                exit(1)
+
+            obs = data['observations'][0]
+            imperial = obs.get('imperial', {})
+
+            current = {
+                "timestamp": datetime.utcnow().isoformat() + "Z",
+                "temp_f": imperial.get('temp'),
+                "dewpoint_f": imperial.get('dewpt'),
+                "humidity": obs.get('humidity'),
+                "pressure_in": imperial.get('pressure'),
+                "wind_dir": obs.get('winddir'),
+                "wind_speed_mph": imperial.get('windSpeed'),
+                "wind_gust_mph": imperial.get('windGust'),
+                "precip_rate_in": imperial.get('precipRate'),
+                "precip_total_in": imperial.get('precipTotal')
+            }
+
+            with open("current-pws.md", "w") as f:
+                f.write(f"# Current PWS Conditions\\n\\nUpdated: {current['timestamp']}\\n\\n")
+                for k, v in current.items():
+                    if v is not None:
+                        f.write(f"- **{k}**: {v}\\n")
+                    else:
+                        f.write(f"- **{k}**: None (missing)\\n")
         except Exception as e:
-            print("JSON parse error:", str(e))
+            print(f"Error: {str(e)}")
+            exit(1)
         EOF
 
     - name: Commit changes
