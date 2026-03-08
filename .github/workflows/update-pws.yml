@@ -26,11 +26,6 @@ jobs:
         WU_API_KEY: ${{ secrets.WU_API_KEY }}
         WU_STATION_ID: ${{ secrets.WU_STATION_ID }}
       run: |
-       - name: Fetch WU data
-      env:
-        WU_API_KEY: ${{ secrets.WU_API_KEY }}
-        WU_STATION_ID: ${{ secrets.WU_STATION_ID }}
-      run: |
         python - <<EOF
         import requests
         import json
