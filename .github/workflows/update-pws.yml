@@ -2,7 +2,7 @@ name: Update PWS Data
 
 on:
   schedule:
-    - cron: '10,35 * * * *'   # every 30 minutes
+    - cron: '10,35 * * * *'   # runs 10 and 35 past the hour
   workflow_dispatch:         # lets you run it manually too
 
 jobs:
