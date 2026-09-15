@@ -1,14 +1,14 @@
 # Current PWS Conditions
 
-Updated: 2026-09-15T16:52:57.270922Z
+Updated: 2026-09-15T20:12:40.856942Z
 
-- **timestamp**: 2026-09-15T16:52:57.270922Z
-- **temp_f**: 81
-- **dewpoint_f**: 70
-- **humidity**: 69
-- **pressure_in**: 30.29
-- **wind_dir**: 180
-- **wind_speed_mph**: 5
-- **wind_gust_mph**: 6
+- **timestamp**: 2026-09-15T20:12:40.856942Z
+- **temp_f**: 89
+- **dewpoint_f**: 74
+- **humidity**: 61
+- **pressure_in**: 30.25
+- **wind_dir**: 270
+- **wind_speed_mph**: 4
+- **wind_gust_mph**: 4
 - **precip_rate_in**: 0.0
 - **precip_total_in**: 0.0
